@@ -7,11 +7,11 @@ import Event from "../components/Event.astro";
 const pageEntries = await contentfulClient.getEntries({content_type: "page", "fields.slug": "events"});
 const page = pageEntries.items[0].fields;
 
-// grab events and filter out any that have already passed
+// grab events and filter out any that have already passed then sort by date
 const events = await contentfulClient.getEntries({content_type: "event", order: "fields.date"})
-    .then(events => {
-        return events.items.filter(event => new Date(event.fields.date) > new Date())
-    });
+    .then(events => events.items.filter(event => new Date(event.fields.date) > new Date()))
+    .then(events => events.sort((a, b) => new Date(a.fields.date) > new Date(b.fields.date) ? 1 : -1));
+
 ---
 
 <style>

@@ -8,6 +8,8 @@ const pageEntries = await contentfulClient.getEntries({content_type: "page", "fi
 const page = pageEntries.items[0].fields;
 
 const docGroups = await contentfulClient.getEntries({content_type: "documentGroup"});
+// sort alphabetically
+docGroups.items = docGroups.items.sort((a, b) => a.fields.title.localeCompare(b.fields.title));
 ---
 
 <style>
