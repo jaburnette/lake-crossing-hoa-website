@@ -66,7 +66,7 @@ const currentPath = Astro.url.pathname;
                     {menuItems.map(menuItem => (
                         <a
                             href={menuItem.href}
-                            class={`${currentPath === menuItem.href ? "text-emerald-700" : "text-neutral-900"} flex flex-col md:flex-row items-center gap-x-1 md:gap-x-4 font-semibold md:font-normal md:text-lg py-3`}
+                            class={`${currentPath.replace("/", "") === menuItem.href.replace("/", "") ? "text-emerald-700" : "text-neutral-900"} flex flex-col md:flex-row items-center gap-x-1 md:gap-x-4 font-semibold md:font-normal md:text-lg py-3`}
                         >
                             <img src={menuItem.icon} alt={menuItem.text} class="h-5 md:h-5" />
                             {menuItem.text}
