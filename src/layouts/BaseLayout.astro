@@ -21,8 +21,8 @@ const menuItems = [
         icon: "/contact.svg",
     }
 ];
+const currentPath = Astro.url.pathname;
 ---
-
 <style is:global>
     body {
         @apply mb-12 text-neutral-700 font-light;
@@ -62,11 +62,11 @@ const menuItems = [
         <div class="grid md:grid-cols-[300px_1fr] items-start gap-x-4">
             <nav class="px-8 mt-8 md:mt-12 md:sticky top-12">
                 <img src="/logo.svg" class="h-28 md:h-auto mx-auto" alt="Lake Crossing HOA" />
-                <div class="flex flex-row md:flex-col mt-4 md:mt-8 md:divide-y divide-neutral-200 rounded gap-x-5 md:gap-x-0 justify-center md:justify-start">
+                <div class="flex flex-row md:flex-col mt-4 md:mt-8 md:divide-y divide-neutral-200 rounded gap-x-5 md:gap-x-0 justify-between md:justify-start">
                     {menuItems.map(menuItem => (
                         <a
                             href={menuItem.href}
-                            class="flex flex-col md:flex-row items-center gap-x-1 md:gap-x-4 font-semibold md:font-normal md:text-lg text-neutral-900 py-3 opacity-80"
+                            class={`${currentPath === menuItem.href ? "text-emerald-700" : "text-neutral-900"} flex flex-col md:flex-row items-center gap-x-1 md:gap-x-4 font-semibold md:font-normal md:text-lg py-3`}
                         >
                             <img src={menuItem.icon} alt={menuItem.text} class="h-5 md:h-5" />
                             {menuItem.text}
