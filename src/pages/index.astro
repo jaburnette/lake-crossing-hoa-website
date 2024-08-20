@@ -1,0 +1,12 @@
+---
+import {contentfulClient} from "../contentful";
+import {documentToHtmlString} from "@contentful/rich-text-html-renderer";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const entries = await contentfulClient.getEntries({content_type: "page", "fields.slug": "home"});
+const page = entries.items[0].fields;
+---
+<BaseLayout>
+    {page.heroImage ? <img src={page.heroImage.fields.file.url} alt={page.heroImage.fields.title} class="object-cover w-full h-72 object-center rounded-xl" /> : null}
+    <article class="mt-8" set:html={documentToHtmlString(page?.body)} />
+</BaseLayout>

@@ -1,0 +1,36 @@
+---
+import {contentfulClient} from "../contentful";
+import {documentToHtmlString} from "@contentful/rich-text-html-renderer";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Event from "../components/Event.astro";
+
+const pageEntries = await contentfulClient.getEntries({content_type: "page", "fields.slug": "events"});
+const page = pageEntries.items[0].fields;
+
+// grab events and filter out any that have already passed
+const events = await contentfulClient.getEntries({content_type: "event", order: "fields.date"})
+    .then(events => {
+        return events.items.filter(event => new Date(event.fields.date) > new Date())
+    });
+---
+
+<style>
+    h1 {
+        @apply mb-4;
+    }
+</style>
+
+<BaseLayout>
+    <h1>{page.title}</h1>
+    {page.heroImage ? <img src={page.heroImage.fields.file.url} alt={page.heroImage.fields.title} class="object-cover w-full h-72 object-center rounded-xl" /> : null}
+    <article set:html={documentToHtmlString(page.body)} />
+
+    {events.map(event => <Event event={event} />)}
+    {!events.length ?
+        <div class="bg-neutral-50 border border-neutral-200 p-4 rounded mt-4">There are currently no neighborhood events scheduled.</div>
+        : null
+    }
+</BaseLayout>
+
+
+

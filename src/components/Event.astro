@@ -1,0 +1,17 @@
+---
+import {documentToHtmlString} from "@contentful/rich-text-html-renderer";
+const { event } = Astro.props
+const date = new Date(event.fields.date);
+---
+
+<div class="mt-6 mb-10 grid grid-cols-[50px_1fr]">
+    <div>
+        <img src="/calendar.svg" class="w-9 opacity-60 mt-1" />
+    </div>
+    <div>
+        <div class="font-medium text-2xl text-emerald-900">{event.fields.title}</div>
+        <div class="font-medium mb-2">{date.toLocaleDateString("en-US", {weekday: "long", month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric"})}</div>
+        <Fragment set:html={documentToHtmlString(event.fields.description)} />
+        <button class="border bg-emerald-700 text-white py-2 px-4 rounded font-semibold">Add to Calendar</button>
+    </div>
+</div>

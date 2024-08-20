@@ -1,0 +1,82 @@
+---
+const menuItems = [
+    {
+        text: "Home",
+        href: "/",
+        icon: "/house.svg",
+    },
+    {
+        text: "Documents",
+        href: "/documents",
+        icon: "/documents.svg",
+    },
+    {
+        text: "Events",
+        href: "/events",
+        icon: "/calendar.svg",
+    },
+    {
+        text: "Contact",
+        href: "/contact",
+        icon: "/contact.svg",
+    }
+];
+---
+
+<style is:global>
+    body {
+        @apply mb-12 text-neutral-700 font-light;
+        font-family: "DM Sans", sans-serif;
+    }
+    p { @apply mb-4; }
+    article { @apply mt-6; }
+    a { @apply text-emerald-800; }
+    h1 {
+        @apply text-4xl font-medium mb-4;
+    }
+    h2 {
+        @apply text-2xl my-2;
+    }
+    h3 {
+        @apply text-xl my-2;
+    }
+    ul {
+        @apply list-disc ml-6 mb-4;
+        & li {
+            & p { @apply mb-0; }
+        }
+    }
+</style>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <title>Lake Crossing HOA</title>
+    </head>
+    <body class="max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-[300px_1fr] items-start gap-x-4">
+            <nav class="px-8 mt-8 md:mt-12 md:sticky top-12">
+                <img src="/logo.svg" class="h-28 md:h-auto mx-auto" alt="Lake Crossing HOA" />
+                <div class="flex flex-row md:flex-col mt-4 md:mt-8 md:divide-y divide-neutral-200 rounded gap-x-5 md:gap-x-0 justify-center md:justify-start">
+                    {menuItems.map(menuItem => (
+                        <a
+                            href={menuItem.href}
+                            class="flex flex-col md:flex-row items-center gap-x-1 md:gap-x-4 font-semibold md:font-normal md:text-lg text-neutral-900 py-3 opacity-80"
+                        >
+                            <img src={menuItem.icon} alt={menuItem.text} class="h-5 md:h-5" />
+                            {menuItem.text}
+                        </a>
+                    ))}
+                </div>
+            </nav>
+            <div class="mt-4 md:mt-12 mx-5">
+                <slot />
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,24 @@
+---
+import {contentfulClient} from "../contentful";
+import {documentToHtmlString} from "@contentful/rich-text-html-renderer";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DocGroup from "../components/DocGroup.astro";
+
+const pageEntries = await contentfulClient.getEntries({content_type: "page", "fields.slug": "documents"});
+const page = pageEntries.items[0].fields;
+
+const docGroups = await contentfulClient.getEntries({content_type: "documentGroup"});
+---
+
+<style>
+    h1 {
+        @apply mb-4;
+    }
+</style>
+
+<BaseLayout>
+    <h1>{page.title}</h1>
+    {page.heroImage ? <img src={page.heroImage.fields.file.url} alt={page.heroImage.fields.title} class="object-cover w-full h-72 object-center rounded-xl" /> : null}
+    <article class="mt-8" set:html={documentToHtmlString(page.body)} />
+    {docGroups.items.map(docGroup => <DocGroup docGroup={docGroup} />)}
+</BaseLayout>
