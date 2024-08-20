@@ -41,6 +41,7 @@ jobs:
         run: npm run build
         env:
           CONTENTFUL_DELIVERY_TOKEN: ${{ vars.CONTENTFUL_DELIVERY_TOKEN }}
+          CONTENTFUL_SPACE_ID: ${{ vars.CONTENTFUL_SPACE_ID }}
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
