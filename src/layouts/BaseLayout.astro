@@ -10,7 +10,7 @@ const navPages = await contentfulClient.getEntries({
 // build a simple version to render off of, sorted by navigationOrder
 const navItems = navPages.items.map(navPage => ({
     text: navPage.fields.navigationTitle || navPage.fields.title,
-    href: `${navPage.fields.slug}`,
+    href: `/${navPage.fields.slug}`,
     icon: navPage.fields.icon?.fields.file.url,
     navigationOrder: navPage.fields.navigationOrder || Number.MAX_SAFE_INTEGER,
 })).sort((a, b) => a.navigationOrder > b.navigationOrder ? 1 : -1);
