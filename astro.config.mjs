@@ -6,6 +6,7 @@ export default defineConfig({
   integrations: [
     tailwind(),
   ],
+  trailingSlash: "never",
   vite: {
     plugins: [],
     server: {
