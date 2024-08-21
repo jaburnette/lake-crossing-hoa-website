@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {contentfulClient, renderBodyContent} from "../contentful";
+
+export async function getStaticPaths() {
+    const entries = await contentfulClient.getEntries({content_type: "page"});
+    return entries.items.map(page => ({
+        params: {slug: page.fields.slug },
+        props: {
+            page,
+        }
+    }));
+}
+
+const {page} = Astro.props;
+---
+
+
+
+<BaseLayout>
+    <h1>{page.fields.title}</h1>
+    {page.fields.heroImage ?
+        <img src={page.fields.heroImage.fields.file.url} alt={page.fields.heroImage.fields.title} class="object-cover w-full h-72 object-center rounded-xl" />
+        : null
+    }
+    <article class="mt-8" set:html={renderBodyContent(page.fields.body)} />
+</BaseLayout>

@@ -1,26 +1,20 @@
 ---
-const menuItems = [
-    {
-        text: "Home",
-        href: "/",
-        icon: "/house.svg",
-    },
-    {
-        text: "Documents",
-        href: "/documents",
-        icon: "/documents.svg",
-    },
-    {
-        text: "Events",
-        href: "/events",
-        icon: "/calendar.svg",
-    },
-    {
-        text: "Contact",
-        href: "/contact",
-        icon: "/contact.svg",
-    }
-];
+import {contentfulClient} from "../contentful";
+
+// get the pages that are exposed in the nav
+const navPages = await contentfulClient.getEntries({
+    content_type: "page",
+    "fields.showInNavigation": true
+});
+
+// build a simple version to render off of, sorted by navigationOrder
+const navItems = navPages.items.map(navPage => ({
+    text: navPage.fields.navigationTitle || navPage.fields.title,
+    href: `${navPage.fields.slug}`,
+    icon: navPage.fields.icon?.fields.file.url,
+    navigationOrder: navPage.fields.navigationOrder || Number.MAX_SAFE_INTEGER,
+})).sort((a, b) => a.navigationOrder > b.navigationOrder ? 1 : -1);
+
 const currentPath = Astro.url.pathname;
 ---
 <style is:global>
@@ -55,7 +49,6 @@ const currentPath = Astro.url.pathname;
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <title>Lake Crossing HOA</title>
     </head>
     <body class="max-w-6xl mx-auto">
@@ -63,15 +56,16 @@ const currentPath = Astro.url.pathname;
             <nav class="px-8 mt-8 md:mt-12 md:sticky top-12">
                 <img src="/logo.svg" class="h-28 md:h-auto mx-auto" alt="Lake Crossing HOA" />
                 <div class="flex flex-row md:flex-col mt-4 md:mt-8 md:divide-y divide-neutral-200 rounded gap-x-5 md:gap-x-0 justify-between md:justify-start">
-                    {menuItems.map(menuItem => (
+                    {navItems.map(menuItem => (
                         <a
                             href={menuItem.href}
                             class={`${currentPath.replaceAll("/", "") === menuItem.href.replace("/", "") ? "text-emerald-700" : "text-neutral-900"} flex flex-col md:flex-row items-center gap-x-1 md:gap-x-4 font-semibold md:font-normal md:text-lg py-3`}
                         >
-                            <img src={menuItem.icon} alt={menuItem.text} class="h-5 md:h-5" />
+                            {menuItem.icon ? <img src={menuItem.icon} alt={menuItem.text} class="h-5 md:h-5" /> : <div class="w-5" />}
                             {menuItem.text}
                         </a>
                     ))}
+
                 </div>
             </nav>
             <div class="mt-4 md:mt-12 mx-5">
