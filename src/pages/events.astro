@@ -6,10 +6,9 @@ import Event from "../components/Event.astro";
 const pageEntries = await contentfulClient.getEntries({content_type: "page", "fields.slug": "events"});
 const page = pageEntries.items[0].fields;
 
-// grab events and filter out any that have already passed then sort by date
+// grab events and sort by date
 const events = await contentfulClient.getEntries({content_type: "event", order: "fields.date"})
-    .then(events => events.items.filter(event => new Date(event.fields.date) > new Date()))
-    .then(events => events.sort((a, b) => new Date(a.fields.date) > new Date(b.fields.date) ? 1 : -1));
+    .then(events => events.items.sort((a, b) => new Date(a.fields.date) > new Date(b.fields.date) ? 1 : -1));
 
 ---
 
@@ -24,7 +23,8 @@ const events = await contentfulClient.getEntries({content_type: "event", order: 
     {page.heroImage ? <img src={page.heroImage.fields.file.url} alt={page.heroImage.fields.title} class="object-cover w-full h-72 object-center rounded-xl" /> : null}
     <article set:html={renderBodyContent(page.body)} />
 
-    {events.map(event => <Event event={event} />)}
+    <!-- Inline filter out events that have already passed -->
+    {events.filter(event => new Date(event.fields.date) > new Date()).map(event => <Event event={event} />)}
     {!events.length ?
         <div class="bg-neutral-50 border border-neutral-200 p-4 rounded mt-4">There are currently no neighborhood events scheduled.</div>
         : null

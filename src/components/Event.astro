@@ -2,6 +2,7 @@
 import {documentToHtmlString} from "@contentful/rich-text-html-renderer";
 const { event } = Astro.props
 const date = new Date(event.fields.date);
+const calDateRange = `${date.toISOString().replace(/[:-]/g, "").substring(0, 15)}Z`;
 ---
 
 <div class="mt-6 mb-10 grid grid-cols-[50px_1fr]">
@@ -12,6 +13,6 @@ const date = new Date(event.fields.date);
         <div class="font-medium text-2xl text-emerald-900">{event.fields.title}</div>
         <div class="font-medium mb-2">{date.toLocaleDateString("en-US", {weekday: "long", month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric"})}</div>
         <Fragment set:html={documentToHtmlString(event.fields.description)} />
-        <button class="border bg-emerald-700 text-white py-2 px-4 rounded font-semibold">Add to Calendar</button>
+        <a href={`https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${calDateRange}%2F${calDateRange}&details=${documentToHtmlString(event.fields.description).replace(/<[^>]*>/g, '')}&text=${event.fields.title}`} class="border bg-emerald-700 text-white py-2 px-4 rounded font-semibold">Add to Calendar</a>
     </div>
 </div>
