@@ -15,8 +15,6 @@ export async function getStaticPaths() {
 const {page} = Astro.props;
 ---
 
-
-
 <BaseLayout>
     <h1>{page.fields.title}</h1>
     {page.fields.heroImage ?
@@ -24,4 +22,10 @@ const {page} = Astro.props;
         : null
     }
     <article class="mt-8" set:html={renderBodyContent(page.fields.body)} />
+    {page.fields.slug === "contact" &&
+        <>
+            <div class="max-w-sm" style="height:500px;" data-fillout-id="nXeQd1oLsVus" data-fillout-embed-type="standard" data-fillout-inherit-parameters data-fillout-dynamic-resize />
+            <script src="https://server.fillout.com/embed/v1/" />
+        </>
+    }
 </BaseLayout>

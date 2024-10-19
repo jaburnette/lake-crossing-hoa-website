@@ -29,16 +29,23 @@ const currentPath = Astro.url.pathname;
         @apply text-4xl font-medium mb-4;
     }
     h2 {
-        @apply text-2xl my-2;
+        @apply text-2xl my-2 font-medium;
     }
     h3 {
-        @apply text-xl my-2;
+        @apply text-lg my-2 font-medium;
     }
     ul {
         @apply list-disc ml-6 mb-4;
         & li {
             & p { @apply mb-0; }
         }
+    }
+    b {
+        @apply font-semibold;
+    }
+    p b {
+        /* Bolded text inside paragraphs should be bolder than everywhere else. */
+        @apply font-bold;
     }
 </style>
 
