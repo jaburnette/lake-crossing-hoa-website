@@ -3,6 +3,19 @@ import {documentToHtmlString} from "@contentful/rich-text-html-renderer";
 const { event } = Astro.props
 const date = new Date(event.fields.date);
 const calDateRange = `${date.toISOString().replace(/[:-]/g, "").substring(0, 15)}Z`;
+
+const dateFormatOptions = {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+};
+
+// dates with no time should not render 12:00am
+if (date.getHours()) {
+    dateFormatOptions.hour = "numeric";
+    dateFormatOptions.minute = "numeric";
+}
 ---
 
 <div class="mt-6 mb-10 grid grid-cols-[50px_1fr]">
@@ -11,8 +24,10 @@ const calDateRange = `${date.toISOString().replace(/[:-]/g, "").substring(0, 15)
     </div>
     <div>
         <div class="font-medium text-2xl text-emerald-900">{event.fields.title}</div>
-        <div class="font-medium mb-2">{date.toLocaleDateString("en-US", {weekday: "long", month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric"})}</div>
+        <div class="font-medium mb-2">
+            {date.toLocaleDateString("en-US", dateFormatOptions)}
+        </div>
         <Fragment set:html={documentToHtmlString(event.fields.description)} />
-        <a href={`https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${calDateRange}%2F${calDateRange}&details=${documentToHtmlString(event.fields.description).replace(/<[^>]*>/g, '')}&text=${event.fields.title}`} class="bg-emerald-700 text-white py-2 px-4 rounded font-semibold mt-2">Add to Google Calendar</a>
+        <a href={`https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${calDateRange}%2F${calDateRange}&details=${documentToHtmlString(event.fields.description).replace(/<[^>]*>/g, '')}&text=${event.fields.title}`} class="inline-block border border-emerald-700 text-emerald-700 py-2 px-4 rounded font-semibold mt-1 text-sm">Add to Google Calendar</a>
     </div>
 </div>
