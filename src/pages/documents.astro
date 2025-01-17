@@ -23,3 +23,11 @@ docGroups.items = docGroups.items.sort((a, b) => a.fields.title.localeCompare(b.
     <article class="mt-8" set:html={renderBodyContent(page.body)} />
     {docGroups.items.map(docGroup => <DocGroup docGroup={docGroup} />)}
 </BaseLayout>
+
+<script is:inline type="text/javascript">
+    // called by the "show more" button on a given doc group when the doc count exceeds 4
+    function showDocGroup(el) {
+        document.getElementById(el.dataset.target).classList.remove("hidden");
+        el.remove();
+    }
+</script>

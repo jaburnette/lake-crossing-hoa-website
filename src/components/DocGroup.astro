@@ -4,12 +4,32 @@ const { docGroup } = Astro.props
 
 <div class="mt-8">
     <div class="font-medium text-2xl">{docGroup.fields.title}</div>
-    <div class="flex flex-col divide-y mt-2">
-        {docGroup.fields.files?.map(file => (
+    <div class="divide-y mt-2">
+        {docGroup.fields.files?.slice(0, 4).map(file => (
             <div class="py-3">
                 <a href={file.fields.file.url} target="_blank" class="font-medium text-emerald-800 text-lg">{file.fields.title}</a>
-                <div class="mt-2">{file.fields.description}</div>
+                <div class={`${file.fields.description ? "mt-2" : null}`}>{file.fields.description}</div>
             </div>
         ))}
+        {docGroup.fields.files?.length > 4 &&
+            <div>
+                <div class="more-docs divide-y hidden" id={docGroup.fields.title.replaceAll(" ", "-").toLowerCase()}>
+                    {docGroup.fields.files?.slice(4).map(file => (
+                      <div class="py-3">
+                          <a href={file.fields.file.url} target="_blank" class="font-medium text-emerald-800 text-lg">{file.fields.title}</a>
+                          <div class={`${file.fields.description ? "mt-2" : null}`}>{file.fields.description}</div>
+                      </div>
+                    ))}
+                </div>
+                <button
+                    type="button"
+                    data-target={docGroup.fields.title.replaceAll(" ", "-").toLowerCase()}
+                    onclick="showDocGroup(this)"
+                    class="text-emerald-800 text-lg border border-emerald-800 mt-4 px-4 rounded font-medium hover:bg-emerald-50"
+                >
+                      + {docGroup.fields.files?.length - 4} more
+                    </button>
+            </div>
+        }
     </div>
 </div>
